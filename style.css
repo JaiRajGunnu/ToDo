@@ -4,7 +4,6 @@ body {
     margin: 0;
     padding: 0;
 }
-
 .container {
     max-width: 500px;
     margin: 50px auto;
@@ -13,28 +12,23 @@ body {
     border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
 h1 {
     text-align: center;
     color: #333;
     margin-bottom:25px;
 }
-
 section {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
     font-size:16px;
     margin: 15px 5px;    
     height:40px;
 }
-
-
 section div{
     cursor:pointer;
     transition:0.75s;
 }
-
 section div:hover{
     color:blue;
 }
@@ -45,13 +39,10 @@ section div:active::after, section div:focus::after, section div:hover::after, s
     background-color: blue;
     margin-top: 0;
 }
-
-
 ul {
     list-style: none;
     padding: 0;
 }
-
 li {
     display: flex;
     justify-content: space-between;
@@ -67,15 +58,14 @@ li {
     border-radius: 07px;
     border:0.25px solid rgba(170, 170, 170, 0.073);
 }
-
 li:hover{
     background-color: #64636312;
     border:0.25px solid rgba(170, 170, 170, 0.173);
 }
-
 li .task-date {
     font-family: 'Poppins', sans-serif;
     font-size: 12px;
+    text-align:left;
     opacity: 0.75;
     margin: 0px 20px;
 }
@@ -99,7 +89,7 @@ input[type="text"] {
     font-size:15px;
     background-color: #fff;
     border-radius: 07px;
-
+    transition:0.5s;
 }
 input[type="checkbox"] {
     margin-right: 10px;
@@ -139,7 +129,6 @@ button#addTask:hover, button.delete:hover    {
 .fa-solid.fa-plus{
     font-size:25px;
 }
-
 .popup {
     display: none;
     position: absolute;
@@ -153,13 +142,10 @@ button#addTask:hover, button.delete:hover    {
     border-radius: 07px;
     text-align: center;
     z-index: 9999;
-
 }
-
-/* Your existing CSS styles */
 #taskList .message {
     display: none;
-    color: #888; /* Adjust the color as needed */
+    color: #888;
     text-align: center;
-    margin-top: 10px; /* Adjust the margin as needed */
+    margin-top: 10px;
 }
