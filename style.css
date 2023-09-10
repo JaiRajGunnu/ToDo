@@ -21,30 +21,23 @@ h1 {
 
 section {
     display: flex;
-    justify-content: space-between; /* Adjust spacing between filters and line */
     align-items: center;
     gap: 15px;
     margin: 15px 5px;    
+    height:40px;
 }
 
-.filter {
-    cursor: pointer;
-}
-
-.line {
-    flex-grow: 1;
-    height: 2px;
-    background-color: transparent; /* Initial background color */
-    transition: background-color 0.3s; /* Smooth transition */
-}
 
 section div{
     cursor:pointer;
+    content: "";
+
 }
-section:hover{
+
+section div:hover{
     color:blue;
 }
-section div::after {
+section div:active::after, section div:focus::after, section div:hover::after {
     content: "";
     display: block;
     height: 2px; 

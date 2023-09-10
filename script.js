@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const popup = document.getElementById('popup');
     const allDiv = document.querySelector('.a'); // All div
     const doneDiv = document.querySelector('.b'); // Done div
-    const pendingDiv = document.querySelector('.c'); // Pending div
 
     // Function to get the formatted date and time
     function getFormattedDateTime() {
@@ -24,11 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
         taskList.innerHTML = '';
 
         savedTasks.forEach(function (taskObject, index) {
-            if (
-                (filter === 'all') ||
-                (filter === 'done' && taskObject.done) ||
-                (filter === 'pending' && !taskObject.done)
-            ) {
+            if (filter === 'all' || (filter === 'done' && taskObject.done)) {
                 const taskItem = createTaskElement(taskObject, index);
                 taskList.appendChild(taskItem);
             }
@@ -119,10 +114,5 @@ document.addEventListener('DOMContentLoaded', function () {
     // Event listener to display only checked tasks when "Done" div is clicked
     doneDiv.addEventListener('click', function () {
         renderTasks('done');
-    });
-
-    // Event listener to display only unchecked tasks when "Pending" div is clicked
-    pendingDiv.addEventListener('click', function () {
-        renderTasks('pending');
     });
 });
