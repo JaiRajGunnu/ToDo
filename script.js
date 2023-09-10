@@ -102,9 +102,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Automatically focus on the input field when the page loads
-    taskInput.focus();
-
     // Function to add a new task
     function addTask() {
         const taskText = taskInput.value.trim();
