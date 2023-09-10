@@ -23,6 +23,7 @@ section {
     display: flex;
     align-items: center;
     gap: 15px;
+    font-size:16px;
     margin: 15px 5px;    
     height:40px;
 }
@@ -37,13 +38,14 @@ section div{
 section div:hover{
     color:blue;
 }
-section div:active::after, section div:focus::after, section div:hover::after {
+section div:active::after, section div:focus::after, section div:hover::after, section div.active::after {
     content: "";
     display: block;
-    height: 2px; 
-    background-color: blue; 
-    margin-top: 0; 
+    height: 2px;
+    background-color: blue;
+    margin-top: 0;
 }
+
 
 ul {
     list-style: none;
@@ -59,14 +61,14 @@ li {
     font-size:18px;
     font-family:hammersmith one ;
     font-weight:500;
+    cursor:pointer;
     text-transform: capitalize;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
+    background-color: #43434317;
     border-radius: 07px;
 }
 
 li:hover{
-    background-color: #efefef;
+    background-color: #8b8a8a12;
 }
 
 li .task-date {

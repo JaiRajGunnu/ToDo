@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const popup = document.getElementById('popup');
     const allDiv = document.querySelector('.a'); // All div
     const doneDiv = document.querySelector('.b'); // Done div
+    const pendingDiv = document.querySelector('.c'); // Pending div
 
     // Function to get the formatted date and time
     function getFormattedDateTime() {
@@ -23,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
         taskList.innerHTML = '';
 
         savedTasks.forEach(function (taskObject, index) {
-            if (filter === 'all' || (filter === 'done' && taskObject.done)) {
+            if (filter === 'all' || (filter === 'done' && taskObject.done) || (filter === 'pending' && !taskObject.done)) {
                 const taskItem = createTaskElement(taskObject, index);
                 taskList.appendChild(taskItem);
             }
@@ -109,10 +110,27 @@ document.addEventListener('DOMContentLoaded', function () {
     // Event listener to display all tasks when "All" div is clicked
     allDiv.addEventListener('click', function () {
         renderTasks('all');
+        allDiv.classList.add('active');
+        doneDiv.classList.remove('active');
+        pendingDiv.classList.remove('active');
     });
 
     // Event listener to display only checked tasks when "Done" div is clicked
     doneDiv.addEventListener('click', function () {
         renderTasks('done');
+        allDiv.classList.remove('active');
+        doneDiv.classList.add('active');
+        pendingDiv.classList.remove('active');
     });
+
+    // Event listener to display only unchecked tasks when "Pending" div is clicked
+    pendingDiv.addEventListener('click', function () {
+        renderTasks('pending');
+        allDiv.classList.remove('active');
+        doneDiv.classList.remove('active');
+        pendingDiv.classList.add('active');
+    });
+
+    // Set "All" tab as active by default
+    allDiv.click();
 });
