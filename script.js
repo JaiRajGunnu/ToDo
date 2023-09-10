@@ -20,29 +20,35 @@ document.addEventListener('DOMContentLoaded', function () {
     // Load tasks from local storage when the page loads
     const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-    // Function to render tasks based on the filter
-    function renderTasks(filter) {
-        taskList.innerHTML = '';
-        let tasksToShow = savedTasks.filter(function (taskObject) {
-            if (filter === 'all' || (filter === 'done' && taskObject.done) || (filter === 'pending' && !taskObject.done)) {
-                return true;
-            }
-            return false;
-        });
 
-        if (tasksToShow.length === 0) {
-            messageDiv.innerHTML = 'Nothing there to show'; // Set the message when no tasks are there
-            messageDiv.style.display = 'block';
-        } else {
-            messageDiv.innerHTML = ''; // Clear the message when tasks are available
-            messageDiv.style.display = 'none';
+// Function to render tasks based on the filter
+function renderTasks(filter) {
+    taskList.innerHTML = '';
+
+    const filteredTasks = savedTasks.filter(function (taskObject) {
+        if (filter === 'all') {
+            return true;
+        } else if (filter === 'done') {
+            return taskObject.done;
+        } else if (filter === 'pending') {
+            return !taskObject.done;
         }
+    });
 
-        tasksToShow.forEach(function (taskObject, index) {
+    if (filteredTasks.length === 0) {
+        const noTasksMessage = document.createElement('p');
+        noTasksMessage.textContent = 'No tasks found.';
+        noTasksMessage.style.textAlign = 'center'; 
+        taskList.appendChild(noTasksMessage);
+    } else {
+        filteredTasks.forEach(function (taskObject, index) {
             const taskItem = createTaskElement(taskObject, index);
             taskList.appendChild(taskItem);
         });
     }
+}
+
+
 
     // Function to create a task element
     function createTaskElement(taskObject, index) {

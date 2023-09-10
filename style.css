@@ -31,8 +31,7 @@ section {
 
 section div{
     cursor:pointer;
-    content: "";
-
+    transition:0.75s;
 }
 
 section div:hover{
@@ -65,10 +64,12 @@ li {
     text-transform: capitalize;
     background-color: #43434317;
     border-radius: 07px;
+    border:0.25px solid rgba(170, 170, 170, 0.073);
 }
 
 li:hover{
-    background-color: #8b8a8a12;
+    background-color: #64636312;
+    border:0.25px solid rgba(170, 170, 170, 0.173);
 }
 
 li .task-date {
@@ -77,12 +78,10 @@ li .task-date {
     opacity: 0.75;
     margin: 0px 20px;
 }
-
 .box {
     display: flex;
     align-items: center;
 }
-
 label {
     flex-grow: 1; 
 }
@@ -105,8 +104,6 @@ input[type="checkbox"] {
     margin-right: 10px;
     transform: scale(1.2); 
 }
-
-
 input:focus, textarea:focus {
     outline: none ;
  	border:2px solid blue;
@@ -115,7 +112,7 @@ input:focus, textarea:focus {
 }
 ul input[type="checkbox"]:checked {
     opacity: 0.25;
-  }
+}
 button#addTask {
     background:blue;
     height:45px;
@@ -141,15 +138,6 @@ button#addTask:hover, button.delete:hover    {
 .fa-solid.fa-plus{
     font-size:25px;
 }
-
-.form-control {
-    font-size: 2rem;
-    font-weight: bold;
-    line-height: 1.1;
-    display: grid;
-    grid-template-columns: 1em auto;
-    gap: 0.5em;
-  }
 
 .popup {
     display: none;
