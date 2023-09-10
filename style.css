@@ -71,17 +71,18 @@ input:focus, textarea:focus {
  	border:2px solid blue;
     background:rgba(215, 227, 255, 0.4);
 }
- label input[type="checkbox"]:checked{
+ul  input[type="checkbox"]:checked {
     opacity: 0.25;
   }
+
   
 button#addTask {
-    background-color:blue;
+    background:blue;
     height:45px;
-    margin:0 10px; 
+    margin:0 0 0 10px; 
 }
 button.delete {
-    background-color:red;
+    background:red;
     width:auto;
     padding:08px 10px;
 }
@@ -92,8 +93,11 @@ button {
     padding: 5px 10px;
     cursor: pointer;
     padding:7px 15px;
+    transition:0.5s;
 }
-
+button#addTask:hover, button.delete:hover    {
+    background:rgba(49, 49, 49, 0.996);
+}
 .fa-solid.fa-plus{
     font-size:20px;
 }

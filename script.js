@@ -47,9 +47,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Attach a click event to the delete button
         taskItem.querySelector('.delete').addEventListener('click', function () {
-            savedTasks.splice(index, 1);
-            localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            renderTasks();
+            // Show a confirmation dialog
+            const confirmDelete = confirm('Are you sure you want to delete this task?');
+
+            if (confirmDelete) {
+                savedTasks.splice(index, 1);
+                localStorage.setItem('tasks', JSON.stringify(savedTasks));
+                renderTasks();
+            }
         });
 
         // Attach a change event to the checkbox
@@ -72,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         popup.style.display = 'block';
         setTimeout(() => {
             popup.style.display = 'none';
-        }, 2000); // Hide the popup after 2 seconds (adjust as needed)
+        }, 5000); // Hide the popup after 5 seconds (adjust as needed)
     }
 
     // Add a new task when the "Add" button is clicked
@@ -84,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
             renderTasks();
             taskInput.value = '';
         } else {
-            showPopup('No task assigned.');
+            showPopup('Please enter an task to this To-do list.');
         }
     });
 
