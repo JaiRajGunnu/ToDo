@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const date = now.getDate();
         const month = now.toLocaleString('default', { month: 'short' });
         const time = `${now.getHours()}:${(now.getMinutes() < 10 ? '0' : '') + now.getMinutes()}`;
-        return `${date} ${month}, ${time}`;
+        return `${date}, ${month} ${time}`;
     }
 
     // Load tasks from local storage when the page loads

@@ -78,6 +78,7 @@ input[type="checkbox"] {
     transform: scale(1.2); 
 }
 
+
 input:focus, textarea:focus {
     outline: none ;
  	border:2px solid blue;
@@ -113,7 +114,14 @@ button#addTask:hover, button.delete:hover    {
     font-size:25px;
 }
 
-/* Add this to your existing CSS */
+.form-control {
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 1.1;
+    display: grid;
+    grid-template-columns: 1em auto;
+    gap: 0.5em;
+  }
 
 .popup {
     display: none;
