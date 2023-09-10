@@ -32,12 +32,16 @@ section div{
 section div:hover{
     color:blue;
 }
+section div.active {
+    color: blue;
+}
+
 section div:active::after, section div:focus::after, section div:hover::after, section div.active::after {
     content: "";
     display: block;
     height: 2px;
     background-color: blue;
-    margin-top: 0;
+    margin-top: 2px;
 }
 ul {
     list-style: none;
