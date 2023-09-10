@@ -9,11 +9,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to render tasks from local storage
     function renderTasks() {
         taskList.innerHTML = '';
-        savedTasks.forEach(function (taskText, index) {
+        savedTasks.forEach(function (taskObject, index) {
             const taskItem = document.createElement('li');
             taskItem.innerHTML = `
-                <input type="checkbox" id="task${index}" ${taskText.done ? 'checked' : ''}>
-                <label for="task${index}">${taskText.text}</label>
+                <label>
+                    <input type="checkbox" id="task${index}" ${taskObject.done ? 'checked' : ''}>
+                    ${taskObject.text}
+                </label>
                 <button class="delete"><i class="fa-solid fa-trash-can"></i></button>
             `;
             taskList.appendChild(taskItem);
@@ -28,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Attach a change event to the checkbox
             const checkbox = taskItem.querySelector('input[type="checkbox"]');
             checkbox.addEventListener('change', function () {
-                taskText.done = checkbox.checked;
+                taskObject.done = checkbox.checked;
                 localStorage.setItem('tasks', JSON.stringify(savedTasks));
             });
         });
@@ -37,14 +39,24 @@ document.addEventListener('DOMContentLoaded', function () {
     // Load and render tasks
     renderTasks();
 
-    // Add a new task
-    addTaskButton.addEventListener('click', function () {
+    // Function to add a new task
+    function addTask() {
         const taskText = taskInput.value.trim();
         if (taskText !== '') {
             savedTasks.push({ text: taskText, done: false });
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
             renderTasks();
             taskInput.value = '';
+        }
+    }
+
+    // Add a new task when the "Add" button is clicked
+    addTaskButton.addEventListener('click', addTask);
+
+    // Add a new task when the Enter key is pressed in the input field
+    taskInput.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            addTask();
         }
     });
 });

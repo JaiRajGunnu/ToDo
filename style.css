@@ -1,16 +1,16 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Poppins", sans-serif;
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
 }
 
 .container {
-    max-width: 400px;
-    margin: 0 auto;
+    max-width: 500px;
+    margin: 50px auto;
     padding: 20px;
     background-color: #fff;
-    border-radius: 5px;
+    border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -33,34 +33,37 @@ li {
     text-transform: capitalize;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 07px;
 }
-
-input[type="checkbox"] {
-    margin-right: 10px;
-}
-
-input[type="checkbox"]:checked {
-    background: green;
-    border-color: green;
+span {
+    display: flex;
+    align-items: center;
 }
 
 label {
-    flex-grow: 1; /* Allow the label to take up the remaining space */
+    flex-grow: 1; 
 }
 input[type="text"] {
-    width:82%;
+    width: 82%;
     border: 1px solid #ddd;
     margin: 0 auto;
-    padding:02 05px;
-    height:40px;
+    padding: 02px 05px;
+    height: 40px;
     background-color: #fff;
-    border-radius: 5px;
+    border-radius: 07px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2); 
+}
+input[type="checkbox"]:checked + label {
+    text-decoration: line-through;
 }
 button#addTask {
     background-color:blue;
     height:40px;
+    margin:0 10px;    
 }
 button.delete {
     background-color:red;
@@ -68,8 +71,12 @@ button.delete {
 button {
     color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 05px;
     padding: 5px 10px;
     cursor: pointer;
     padding:5px 15px;
+}
+
+.fa-solid.fa-plus{
+    font-size:20px;
 }
