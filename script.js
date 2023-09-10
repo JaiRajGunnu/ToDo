@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // Function to render tasks based on the filter
-function renderTasks(filter) {
+    function renderTasks(filter) {
     taskList.innerHTML = '';
 
     const filteredTasks = savedTasks.filter(function (taskObject) {
@@ -45,8 +45,8 @@ function renderTasks(filter) {
             const taskItem = createTaskElement(taskObject, index);
             taskList.appendChild(taskItem);
         });
+        }
     }
-}
 
 
 
