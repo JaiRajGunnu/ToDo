@@ -30,6 +30,7 @@ li {
     align-items: center;
     margin: 10px 0;
     padding: 10px;
+    text-transform: capitalize;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -42,22 +43,28 @@ input[type="checkbox"] {
 label {
     flex-grow: 1; /* Allow the label to take up the remaining space */
 }
-input {
+input[type="text"] {
     width:82%;
     border: 1px solid #ddd;
     margin: 0 auto;
-    height:25px;
+    padding:02 05px;
+    height:40px;
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+button#addTask {
+    background-color:blue;
+    height:40px;
+}
+button.delete {
+    background-color:red;
+}
 button {
-    background-color: #333;
     color: #fff;
     border: none;
     border-radius: 5px;
     padding: 5px 10px;
     cursor: pointer;
-    height:25px;
     padding:5px 15px;
 }
