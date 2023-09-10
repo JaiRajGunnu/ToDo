@@ -43,15 +43,9 @@ document.addEventListener('DOMContentLoaded', function () {
 function showPopup(message) {
     popup.innerHTML = `<p>${message}</p>`;
     popup.style.display = 'block';
-    
-    // Reset the animation by toggling a class
-    popup.classList.remove('fade-out');
-    void popup.offsetWidth; // Trigger reflow
-    popup.classList.add('fade-out');
-
-    setTimeout(() => {
-        popup.style.display = 'none';
-    }, 5000); // Hide the popup after 5 seconds (adjust as needed)
+        setTimeout(() => {
+         popup.style.display = 'none';
+         }, 5000); // Hide the popup after 5 seconds (adjust as needed)
 }
 
     // Add a new task when the "Add" button is clicked
