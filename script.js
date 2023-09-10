@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const addTaskButton = document.getElementById('addTask');
     const taskList = document.getElementById('taskList');
     const popup = document.getElementById('popup');
+    const allDiv = document.querySelector('.a'); // All div
+    const doneDiv = document.querySelector('.b'); // Done div
+    const pendingDiv = document.querySelector('.c'); // Pending div
 
     // Function to get the formatted date and time
     function getFormattedDateTime() {
@@ -16,30 +19,19 @@ document.addEventListener('DOMContentLoaded', function () {
     // Load tasks from local storage when the page loads
     const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-    // Function to render tasks from local storage
-    function renderTasks() {
+    // Function to render tasks based on the filter
+    function renderTasks(filter) {
         taskList.innerHTML = '';
 
-        // Separate completed and incomplete tasks
-        const completedTasks = [];
-        const incompleteTasks = [];
-
         savedTasks.forEach(function (taskObject, index) {
-            const taskItem = createTaskElement(taskObject, index);
-
-            if (taskObject.done) {
-                completedTasks.push(taskItem);
-            } else {
-                incompleteTasks.push(taskItem);
+            if (
+                (filter === 'all') ||
+                (filter === 'done' && taskObject.done) ||
+                (filter === 'pending' && !taskObject.done)
+            ) {
+                const taskItem = createTaskElement(taskObject, index);
+                taskList.appendChild(taskItem);
             }
-        });
-
-        // Concatenate incomplete tasks and completed tasks
-        const allTasks = incompleteTasks.concat(completedTasks);
-
-        // Append tasks to the task list
-        allTasks.forEach(function (taskItem) {
-            taskList.appendChild(taskItem);
         });
     }
 
@@ -63,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (confirmDelete) {
                 savedTasks.splice(index, 1);
                 localStorage.setItem('tasks', JSON.stringify(savedTasks));
-                renderTasks();
+                renderTasks('all'); // Re-render all tasks
             }
         });
 
@@ -72,14 +64,14 @@ document.addEventListener('DOMContentLoaded', function () {
         checkbox.addEventListener('change', function () {
             taskObject.done = checkbox.checked;
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            renderTasks();
+            renderTasks('all'); // Re-render all tasks
         });
 
         return taskItem;
     }
 
-    // Load and render tasks
-    renderTasks();
+    // Load and render all tasks initially
+    renderTasks('all');
 
     // Function to show the popup with the specified message
     function showPopup(message) {
@@ -102,6 +94,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Automatically focus on the input field when the page loads
+    taskInput.focus();
+
     // Function to add a new task
     function addTask() {
         const taskText = taskInput.value.trim();
@@ -109,10 +104,25 @@ document.addEventListener('DOMContentLoaded', function () {
             const formattedDateTime = getFormattedDateTime(); // Get the formatted date and time
             savedTasks.push({ text: taskText, done: false, dateTime: formattedDateTime });
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            renderTasks();
+            renderTasks('all'); // Re-render all tasks
             taskInput.value = '';
         } else {
             showPopup('Please enter a task in this To-do list.');
         }
     }
+
+    // Event listener to display all tasks when "All" div is clicked
+    allDiv.addEventListener('click', function () {
+        renderTasks('all');
+    });
+
+    // Event listener to display only checked tasks when "Done" div is clicked
+    doneDiv.addEventListener('click', function () {
+        renderTasks('done');
+    });
+
+    // Event listener to display only unchecked tasks when "Pending" div is clicked
+    pendingDiv.addEventListener('click', function () {
+        renderTasks('pending');
+    });
 });
