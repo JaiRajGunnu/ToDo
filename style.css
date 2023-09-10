@@ -167,3 +167,10 @@ button#addTask:hover, button.delete:hover    {
 
 }
 
+/* Your existing CSS styles */
+#taskList .message {
+    display: none;
+    color: #888; /* Adjust the color as needed */
+    text-align: center;
+    margin-top: 10px; /* Adjust the margin as needed */
+}

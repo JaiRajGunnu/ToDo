@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const allDiv = document.querySelector('.a'); // All div
     const doneDiv = document.querySelector('.b'); // Done div
     const pendingDiv = document.querySelector('.c'); // Pending div
+    const messageDiv = document.createElement('div'); // Create message div
 
     // Function to get the formatted date and time
     function getFormattedDateTime() {
@@ -22,12 +23,24 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to render tasks based on the filter
     function renderTasks(filter) {
         taskList.innerHTML = '';
-
-        savedTasks.forEach(function (taskObject, index) {
+        let tasksToShow = savedTasks.filter(function (taskObject) {
             if (filter === 'all' || (filter === 'done' && taskObject.done) || (filter === 'pending' && !taskObject.done)) {
-                const taskItem = createTaskElement(taskObject, index);
-                taskList.appendChild(taskItem);
+                return true;
             }
+            return false;
+        });
+
+        if (tasksToShow.length === 0) {
+            messageDiv.innerHTML = 'Nothing there to show'; // Set the message when no tasks are there
+            messageDiv.style.display = 'block';
+        } else {
+            messageDiv.innerHTML = ''; // Clear the message when tasks are available
+            messageDiv.style.display = 'none';
+        }
+
+        tasksToShow.forEach(function (taskObject, index) {
+            const taskItem = createTaskElement(taskObject, index);
+            taskList.appendChild(taskItem);
         });
     }
 
@@ -133,4 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Set "All" tab as active by default
     allDiv.click();
+
+    // Append the message div to the task list
+    taskList.appendChild(messageDiv);
 });
