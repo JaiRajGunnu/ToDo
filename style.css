@@ -110,7 +110,7 @@ button#addTask:hover, button.delete:hover    {
     background:rgba(49, 49, 49, 0.996);
 }
 .fa-solid.fa-plus{
-    font-size:20px;
+    font-size:25px;
 }
 
 /* Add this to your existing CSS */
