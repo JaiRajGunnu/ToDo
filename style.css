@@ -35,7 +35,7 @@ li {
     border: 1px solid #ddd;
     border-radius: 07px;
 }
-span {
+.box {
     display: flex;
     align-items: center;
 }
@@ -57,9 +57,7 @@ input[type="checkbox"] {
     margin-right: 10px;
     transform: scale(1.2); 
 }
-input[type="checkbox"]:checked + label {
-    text-decoration: line-through;
-}
+
 button#addTask {
     background-color:blue;
     height:40px;
