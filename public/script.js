@@ -20,35 +20,32 @@ document.addEventListener('DOMContentLoaded', function () {
     // Load tasks from local storage when the page loads
     const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-
-// Function to render tasks based on the filter
+    // Function to render tasks based on the filter
     function renderTasks(filter) {
-    taskList.innerHTML = '';
+        taskList.innerHTML = '';
 
-    const filteredTasks = savedTasks.filter(function (taskObject) {
-        if (filter === 'all') {
-            return true;
-        } else if (filter === 'done') {
-            return taskObject.done;
-        } else if (filter === 'pending') {
-            return !taskObject.done;
-        }
-    });
-
-    if (filteredTasks.length === 0) {
-        const noTasksMessage = document.createElement('p');
-        noTasksMessage.textContent = 'No tasks found.';
-        noTasksMessage.style.textAlign = 'center'; 
-        taskList.appendChild(noTasksMessage);
-    } else {
-        filteredTasks.forEach(function (taskObject, index) {
-            const taskItem = createTaskElement(taskObject, index);
-            taskList.appendChild(taskItem);
+        const filteredTasks = savedTasks.filter(function (taskObject) {
+            if (filter === 'all') {
+                return true;
+            } else if (filter === 'done') {
+                return taskObject.done;
+            } else if (filter === 'pending') {
+                return !taskObject.done;
+            }
         });
+
+        if (filteredTasks.length === 0) {
+            const noTasksMessage = document.createElement('p');
+            noTasksMessage.textContent = 'No tasks found.';
+            noTasksMessage.style.textAlign = 'center';
+            taskList.appendChild(noTasksMessage);
+        } else {
+            filteredTasks.forEach(function (taskObject, index) {
+                const taskItem = createTaskElement(taskObject, index);
+                taskList.appendChild(taskItem);
+            });
         }
     }
-
-
 
     // Function to create a task element
     function createTaskElement(taskObject, index) {
@@ -70,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (confirmDelete) {
                 savedTasks.splice(index, 1);
                 localStorage.setItem('tasks', JSON.stringify(savedTasks));
-                renderTasks('all'); // Re-render all tasks
+                updateTasks(savedTasks); // Update tasks and broadcast to other clients
             }
         });
 
@@ -79,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
         checkbox.addEventListener('change', function () {
             taskObject.done = checkbox.checked;
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            renderTasks('all'); // Re-render all tasks
+            updateTasks(savedTasks); // Update tasks and broadcast to other clients
         });
 
         return taskItem;
@@ -119,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const formattedDateTime = getFormattedDateTime(); // Get the formatted date and time
             savedTasks.push({ text: taskText, done: false, dateTime: formattedDateTime });
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            renderTasks('all'); // Re-render all tasks
+            updateTasks(savedTasks); // Update tasks and broadcast to other clients
             taskInput.value = '';
         } else {
             showPopup('Please enter a task in this To-do list.');
@@ -155,4 +152,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Append the message div to the task list
     taskList.appendChild(messageDiv);
+
+    // Connect to the socket.io server
+    const io = io();
+
+    // Function to update tasks and emit the update to the server
+    function updateTasks(updatedTasks) {
+        io.emit('updateTasks', updatedTasks);
+    }
+
+    // Event listener to receive updated tasks from the server
+    io.on('tasksUpdated', (updatedTasks) => {
+        // Handle the updated tasks, e.g., render them on the client-side
+        renderTasks(updatedTasks);
+    });
 });
