@@ -93,3 +93,31 @@ button {
 .fa-solid.fa-plus{
     font-size:20px;
 }
+
+/* Add this to your existing CSS */
+
+.popup {
+    display: none;
+    position: absolute;
+    bottom: 50px;
+    left: 50px;
+    /* transform: translate(-50%, -50%); */
+    background-color: rgba(0, 0, 0, 0.8);
+    font-size:15px;
+    color: white;
+    padding: 0px 25px;
+    border-radius: 07px;
+    text-align: center;
+    z-index: 9999;
+    animation: fadeOut 2s ease-in-out forwards; 
+
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const taskInput = document.getElementById('taskInput');
     const addTaskButton = document.getElementById('addTask');
     const taskList = document.getElementById('taskList');
+    const popup = document.getElementById('popup');
 
     // Load tasks from local storage when the page loads
     const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -38,20 +39,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Load and render tasks
     renderTasks();
+// Function to show the popup with the specified message
+function showPopup(message) {
+    popup.innerHTML = `<p>${message}</p>`;
+    popup.style.display = 'block';
+    
+    // Reset the animation by toggling a class
+    popup.classList.remove('fade-out');
+    void popup.offsetWidth; // Trigger reflow
+    popup.classList.add('fade-out');
 
-    // Function to add a new task
-    function addTask() {
+    setTimeout(() => {
+        popup.style.display = 'none';
+    }, 5000); // Hide the popup after 5 seconds (adjust as needed)
+}
+
+    // Add a new task when the "Add" button is clicked
+    addTaskButton.addEventListener('click', function () {
         const taskText = taskInput.value.trim();
         if (taskText !== '') {
             savedTasks.push({ text: taskText, done: false });
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
             renderTasks();
             taskInput.value = '';
+        } else {
+            showPopup('Please enter an task to this To-do list.');
         }
-    }
-
-    // Add a new task when the "Add" button is clicked
-    addTaskButton.addEventListener('click', addTask);
+    });
 
     // Add a new task when the Enter key is pressed in the input field
     taskInput.addEventListener('keydown', function (event) {
