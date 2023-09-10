@@ -4,6 +4,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const taskList = document.getElementById('taskList');
     const popup = document.getElementById('popup');
 
+    // Function to get the formatted date and time
+    function getFormattedDateTime() {
+        const now = new Date();
+        const date = now.getDate();
+        const month = now.toLocaleString('default', { month: 'short' });
+        const time = `${now.getHours()}:${(now.getMinutes() < 10 ? '0' : '') + now.getMinutes()}`;
+        return `${date}, ${month} ${time}`;
+    }
+
     // Load tasks from local storage when the page loads
     const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
@@ -42,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <input type="checkbox" id="task${index}" ${taskObject.done ? 'checked' : ''}>
                 ${taskObject.text}
             </label>
+            <div class="task-date">${taskObject.dateTime}</div> <!-- Display formatted date and time -->
             <button class="delete"><i class="fa-solid fa-trash-can"></i></button>
         `;
 
@@ -82,15 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Add a new task when the "Add" button is clicked
     addTaskButton.addEventListener('click', function () {
-        const taskText = taskInput.value.trim();
-        if (taskText !== '') {
-            savedTasks.push({ text: taskText, done: false });
-            localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            renderTasks();
-            taskInput.value = '';
-        } else {
-            showPopup('Please enter an task to this To-do list.');
-        }
+        addTask();
     });
 
     // Add a new task when the Enter key is pressed in the input field
@@ -99,4 +101,21 @@ document.addEventListener('DOMContentLoaded', function () {
             addTask();
         }
     });
+
+    // Automatically focus on the input field when the page loads
+    taskInput.focus();
+
+    // Function to add a new task
+    function addTask() {
+        const taskText = taskInput.value.trim();
+        if (taskText !== '') {
+            const formattedDateTime = getFormattedDateTime(); // Get the formatted date and time
+            savedTasks.push({ text: taskText, done: false, dateTime: formattedDateTime });
+            localStorage.setItem('tasks', JSON.stringify(savedTasks));
+            renderTasks();
+            taskInput.value = '';
+        } else {
+            showPopup('Please enter a task in this To-do list.');
+        }
+    }
 });

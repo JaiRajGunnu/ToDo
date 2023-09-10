@@ -31,13 +31,25 @@ li {
     margin: 10px 0;
     padding: 10px;
     font-size:18px;
-    font-family:poppins ;
-    font-weight:normal;
+    font-family:hammersmith one ;
+    font-weight:500;
     text-transform: capitalize;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 07px;
 }
+
+li:hover{
+    background-color: #efefef;
+}
+
+li .task-date {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    opacity: 0.75;
+    margin: 0px 20px;
+}
+
 .box {
     display: flex;
     align-items: center;
@@ -48,10 +60,10 @@ label {
 }
 input[type="text"] {
     background-color: white;
-    border: 0.5px solid #c7c7c7;
+    border: 2px solid #c7c7c7;
     color: #000000cc;
     font-weight: 600;
-    padding: 02px 12px;
+    padding: 02px 15px;
     border-radius: 10px;
     font-family:poppins ;
     width: 100% ;
@@ -59,7 +71,7 @@ input[type="text"] {
     font-size:15px;
     background-color: #fff;
     border-radius: 07px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
 }
 input[type="checkbox"] {
     margin-right: 10px;
@@ -70,12 +82,11 @@ input:focus, textarea:focus {
     outline: none ;
  	border:2px solid blue;
     background:rgba(215, 227, 255, 0.4);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.029);
 }
-ul  input[type="checkbox"]:checked {
+ul input[type="checkbox"]:checked {
     opacity: 0.25;
   }
-
-  
 button#addTask {
     background:blue;
     height:45px;
@@ -93,7 +104,7 @@ button {
     padding: 5px 10px;
     cursor: pointer;
     padding:7px 15px;
-    transition:0.5s;
+    transition:0.75s;
 }
 button#addTask:hover, button.delete:hover    {
     background:rgba(49, 49, 49, 0.996);
