@@ -10,43 +10,70 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to render tasks from local storage
     function renderTasks() {
         taskList.innerHTML = '';
+
+        // Separate completed and incomplete tasks
+        const completedTasks = [];
+        const incompleteTasks = [];
+
         savedTasks.forEach(function (taskObject, index) {
-            const taskItem = document.createElement('li');
-            taskItem.innerHTML = `
-                <label>
-                    <input type="checkbox" id="task${index}" ${taskObject.done ? 'checked' : ''}>
-                    ${taskObject.text}
-                </label>
-                <button class="delete"><i class="fa-solid fa-trash-can"></i></button>
-            `;
-            taskList.appendChild(taskItem);
+            const taskItem = createTaskElement(taskObject, index);
 
-            // Attach a click event to the delete button
-            taskItem.querySelector('.delete').addEventListener('click', function () {
-                savedTasks.splice(index, 1);
-                localStorage.setItem('tasks', JSON.stringify(savedTasks));
-                renderTasks();
-            });
-
-            // Attach a change event to the checkbox
-            const checkbox = taskItem.querySelector('input[type="checkbox"]');
-            checkbox.addEventListener('change', function () {
-                taskObject.done = checkbox.checked;
-                localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            });
+            if (taskObject.done) {
+                completedTasks.push(taskItem);
+            } else {
+                incompleteTasks.push(taskItem);
+            }
         });
+
+        // Concatenate incomplete tasks and completed tasks
+        const allTasks = incompleteTasks.concat(completedTasks);
+
+        // Append tasks to the task list
+        allTasks.forEach(function (taskItem) {
+            taskList.appendChild(taskItem);
+        });
+    }
+
+    // Function to create a task element
+    function createTaskElement(taskObject, index) {
+        const taskItem = document.createElement('li');
+        taskItem.innerHTML = `
+            <label>
+                <input type="checkbox" id="task${index}" ${taskObject.done ? 'checked' : ''}>
+                ${taskObject.text}
+            </label>
+            <button class="delete"><i class="fa-solid fa-trash-can"></i></button>
+        `;
+
+        // Attach a click event to the delete button
+        taskItem.querySelector('.delete').addEventListener('click', function () {
+            savedTasks.splice(index, 1);
+            localStorage.setItem('tasks', JSON.stringify(savedTasks));
+            renderTasks();
+        });
+
+        // Attach a change event to the checkbox
+        const checkbox = taskItem.querySelector('input[type="checkbox"]');
+        checkbox.addEventListener('change', function () {
+            taskObject.done = checkbox.checked;
+            localStorage.setItem('tasks', JSON.stringify(savedTasks));
+            renderTasks();
+        });
+
+        return taskItem;
     }
 
     // Load and render tasks
     renderTasks();
-// Function to show the popup with the specified message
-function showPopup(message) {
-    popup.innerHTML = `<p>${message}</p>`;
-    popup.style.display = 'block';
+
+    // Function to show the popup with the specified message
+    function showPopup(message) {
+        popup.innerHTML = `<p>${message}</p>`;
+        popup.style.display = 'block';
         setTimeout(() => {
-         popup.style.display = 'none';
-         }, 5000); // Hide the popup after 5 seconds (adjust as needed)
-}
+            popup.style.display = 'none';
+        }, 2000); // Hide the popup after 2 seconds (adjust as needed)
+    }
 
     // Add a new task when the "Add" button is clicked
     addTaskButton.addEventListener('click', function () {
@@ -57,7 +84,7 @@ function showPopup(message) {
             renderTasks();
             taskInput.value = '';
         } else {
-            showPopup('Please enter an task to this To-do list.');
+            showPopup('No task assigned.');
         }
     });
 

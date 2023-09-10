@@ -71,6 +71,10 @@ input:focus, textarea:focus {
  	border:2px solid blue;
     background:rgba(215, 227, 255, 0.4);
 }
+.todo-list li input[type="checkbox"]:checked {
+    opacity: 0.5;
+  }
+  
 button#addTask {
     background-color:blue;
     height:45px;
