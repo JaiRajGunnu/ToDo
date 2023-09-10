@@ -19,6 +19,27 @@ h1 {
     color: #333;
 }
 
+section {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    margin: 15px 5px;    
+}
+
+section div{
+    cursor:pointer;
+}
+section:hover{
+    color:blue;
+}
+section div::after {
+    content: "";
+    display: block;
+    height: 2px; 
+    background-color: blue; 
+    margin-top: 0; 
+}
+
 ul {
     list-style: none;
     padding: 0;
