@@ -40,6 +40,11 @@ input[type="checkbox"] {
     margin-right: 10px;
 }
 
+input[type="checkbox"]:checked {
+    background: green;
+    border-color: green;
+}
+
 label {
     flex-grow: 1; /* Allow the label to take up the remaining space */
 }

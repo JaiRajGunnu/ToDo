@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
             taskItem.innerHTML = `
                 <input type="checkbox" id="task${index}" ${taskText.done ? 'checked' : ''}>
                 <label for="task${index}">${taskText.text}</label>
-                <button class="delete">Delete</button>
+                <button class="delete"><i class="fa-solid fa-trash-can"></i></button>
             `;
             taskList.appendChild(taskItem);
 
