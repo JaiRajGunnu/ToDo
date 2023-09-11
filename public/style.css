@@ -116,11 +116,13 @@ button#addTask {
 button.delete {
     color:#8e8e8e;
     width:auto;
+    border-radius:50%;
     padding:08px 10px;
 }
 button.delete:hover {
     color:white;  
     background:red;  
+    border-radius:50%;
 }
 button {
     border: none;
