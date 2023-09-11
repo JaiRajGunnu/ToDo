@@ -118,6 +118,10 @@ button.delete {
     width:auto;
     padding:08px 10px;
 }
+button.delete:hover {
+    color:white;
+    background:red;
+}
 button {
     border: none;
     border-radius: 05px;
@@ -126,7 +130,7 @@ button {
     padding:7px 15px;
     transition:0.75s;
 }
-button#addTask:hover, button.delete:hover    {
+button#addTask:hover {
     background:rgba(49, 49, 49, 0.996);
 }
 .fa-solid.fa-plus{
