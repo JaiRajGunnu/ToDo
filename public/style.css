@@ -109,16 +109,16 @@ input:focus, textarea:focus {
 }
 button#addTask {
     background:blue;
+    color: #fff;
     height:45px;
     margin:0 0 0 10px; 
 }
 button.delete {
-    background:red;
+    color:red;
     width:auto;
     padding:08px 10px;
 }
 button {
-    color: #fff;
     border: none;
     border-radius: 05px;
     padding: 5px 10px;
