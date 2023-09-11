@@ -188,16 +188,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-const voiceInputButton = document.getElementById('voiceInput');
-
-voiceInputButton.addEventListener('click', () => {
-    const recognition = new webkitSpeechRecognition();
-    recognition.lang = 'en-US';
-
-    recognition.onresult = (event) => {
-        const result = event.results[0][0].transcript;
-        taskInput.value = result;
-    };
-
-    recognition.start();
-});
