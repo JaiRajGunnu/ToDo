@@ -59,7 +59,7 @@ function renderTasks(filter) {
                 ${taskObject.text}
             </label>
             <div class="task-date">${taskObject.dateTime}</div> <!-- Display formatted date and time -->
-            <button class="delete"><i class="fa-solid fa-trash-can"></i></button>
+            <button class="delete"><i class="fa-solid fa-trash"></i></button>
         `;
 
         // Attach a click event to the delete button
