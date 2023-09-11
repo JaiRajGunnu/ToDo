@@ -73,20 +73,24 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="task-date">${taskObject.dateTime}</div> <!-- Display formatted date and time -->
             <button class="delete" ${taskObject.default ? 'disabled' : ''}><i class="fa-solid fa-trash-can"></i></button>
         `;
+// Attach a click event to the delete button for all tasks
+const deleteButton = taskItem.querySelector('.delete');
+deleteButton.addEventListener('click', function () {
+    if (taskObject.default) {
+        // Display an alert for 
+          const confirmDelete = confirm('Are you sure you want to delete this task?');
+    } else {
+        // Show a confirmation dialog for non-default tasks
+        const confirmDelete = confirm('Are you sure you want to delete this task?');
 
-        // Attach a click event to the delete button
-        if (!taskObject.default) {
-            taskItem.querySelector('.delete').addEventListener('click', function () {
-                // Show a confirmation dialog
-                const confirmDelete = confirm('Are you sure you want to delete this task?');
-
-                if (confirmDelete) {
-                    savedTasks.splice(index, 1);
-                    localStorage.setItem('tasks', JSON.stringify(savedTasks));
-                    renderTasks('all'); // Update tasks and re-render all tasks
-                }
-            });
+        if (confirmDelete) {
+            savedTasks.splice(index, 1);
+            localStorage.setItem('tasks', JSON.stringify(savedTasks));
+            renderTasks('all'); // Update tasks and re-render all tasks
         }
+    }
+});
+
 
         // Attach a change event to the checkbox
         const checkbox = taskItem.querySelector('input[type="checkbox"]');
