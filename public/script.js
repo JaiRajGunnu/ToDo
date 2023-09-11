@@ -14,38 +14,41 @@ document.addEventListener('DOMContentLoaded', function () {
         const date = now.getDate();
         const month = now.toLocaleString('default', { month: 'short' });
         const time = `${now.getHours()}:${(now.getMinutes() < 10 ? '0' : '') + now.getMinutes()}`;
-        return `${date} ${month}, ${time}`;
+        return `${date}, ${month} ${time}`;
     }
 
     // Load tasks from local storage when the page loads
     const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-    // Function to render tasks based on the filter
-    function renderTasks(filter) {
-        taskList.innerHTML = '';
 
-        const filteredTasks = savedTasks.filter(function (taskObject) {
-            if (filter === 'all') {
-                return true;
-            } else if (filter === 'done') {
-                return taskObject.done;
-            } else if (filter === 'pending') {
-                return !taskObject.done;
-            }
-        });
+// Function to render tasks based on the filter
+function renderTasks(filter) {
+    taskList.innerHTML = '';
 
-        if (filteredTasks.length === 0) {
-            const noTasksMessage = document.createElement('p');
-            noTasksMessage.textContent = 'No tasks found.';
-            noTasksMessage.style.textAlign = 'center';
-            taskList.appendChild(noTasksMessage);
-        } else {
-            filteredTasks.forEach(function (taskObject, index) {
-                const taskItem = createTaskElement(taskObject, index);
-                taskList.appendChild(taskItem);
-            });
+    const filteredTasks = savedTasks.filter(function (taskObject) {
+        if (filter === 'all') {
+            return true;
+        } else if (filter === 'done') {
+            return taskObject.done;
+        } else if (filter === 'pending') {
+            return !taskObject.done;
         }
+    });
+
+    if (filteredTasks.length === 0) {
+        const noTasksMessage = document.createElement('p');
+        noTasksMessage.textContent = 'No tasks found.';
+        noTasksMessage.style.textAlign = 'center'; 
+        taskList.appendChild(noTasksMessage);
+    } else {
+        filteredTasks.forEach(function (taskObject, index) {
+            const taskItem = createTaskElement(taskObject, index);
+            taskList.appendChild(taskItem);
+        });
     }
+}
+
+
 
     // Function to create a task element
     function createTaskElement(taskObject, index) {
@@ -67,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (confirmDelete) {
                 savedTasks.splice(index, 1);
                 localStorage.setItem('tasks', JSON.stringify(savedTasks));
-                updateTasks(savedTasks); // Update tasks and broadcast to other clients
+                renderTasks('all'); // Re-render all tasks
             }
         });
 
@@ -76,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
         checkbox.addEventListener('change', function () {
             taskObject.done = checkbox.checked;
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            updateTasks(savedTasks); // Update tasks and broadcast to other clients
+            renderTasks('all'); // Re-render all tasks
         });
 
         return taskItem;
@@ -116,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const formattedDateTime = getFormattedDateTime(); // Get the formatted date and time
             savedTasks.push({ text: taskText, done: false, dateTime: formattedDateTime });
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            updateTasks(savedTasks); // Update tasks and broadcast to other clients
+            renderTasks('all'); // Re-render all tasks
             taskInput.value = '';
         } else {
             showPopup('Please enter a task in this To-do list.');
