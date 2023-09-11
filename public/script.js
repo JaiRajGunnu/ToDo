@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const doneDiv = document.querySelector('.b'); // Done div
     const pendingDiv = document.querySelector('.c'); // Pending div
     const messageDiv = document.createElement('div'); // Create message div
+    const pendingCount = document.getElementById('pendingCount'); // Pending tasks count element
 
     // Function to get the formatted date and time
     function getFormattedDateTime() {
@@ -20,35 +21,32 @@ document.addEventListener('DOMContentLoaded', function () {
     // Load tasks from local storage when the page loads
     const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
+    // Function to render tasks based on the filter
+    function renderTasks(filter) {
+        taskList.innerHTML = '';
 
-// Function to render tasks based on the filter
-function renderTasks(filter) {
-    taskList.innerHTML = '';
-
-    const filteredTasks = savedTasks.filter(function (taskObject) {
-        if (filter === 'all') {
-            return true;
-        } else if (filter === 'done') {
-            return taskObject.done;
-        } else if (filter === 'pending') {
-            return !taskObject.done;
-        }
-    });
-
-    if (filteredTasks.length === 0) {
-        const noTasksMessage = document.createElement('p');
-        noTasksMessage.textContent = 'No tasks found.';
-        noTasksMessage.style.textAlign = 'center'; 
-        taskList.appendChild(noTasksMessage);
-    } else {
-        filteredTasks.forEach(function (taskObject, index) {
-            const taskItem = createTaskElement(taskObject, index);
-            taskList.appendChild(taskItem);
+        const filteredTasks = savedTasks.filter(function (taskObject) {
+            if (filter === 'all') {
+                return true;
+            } else if (filter === 'done') {
+                return taskObject.done;
+            } else if (filter === 'pending') {
+                return !taskObject.done;
+            }
         });
+
+        if (filteredTasks.length === 0) {
+            const noTasksMessage = document.createElement('p');
+            noTasksMessage.textContent = 'No tasks found.';
+            noTasksMessage.style.textAlign = 'center';
+            taskList.appendChild(noTasksMessage);
+        } else {
+            filteredTasks.forEach(function (taskObject, index) {
+                const taskItem = createTaskElement(taskObject, index);
+                taskList.appendChild(taskItem);
+            });
+        }
     }
-}
-
-
 
     // Function to create a task element
     function createTaskElement(taskObject, index) {
@@ -59,7 +57,7 @@ function renderTasks(filter) {
                 ${taskObject.text}
             </label>
             <div class="task-date">${taskObject.dateTime}</div> <!-- Display formatted date and time -->
-            <button class="delete"><i class="fa-solid fa-trash"></i></button>
+            <button class="delete"><i class="fa-solid fa-trash-can"></i></button>
         `;
 
         // Attach a click event to the delete button
@@ -70,7 +68,7 @@ function renderTasks(filter) {
             if (confirmDelete) {
                 savedTasks.splice(index, 1);
                 localStorage.setItem('tasks', JSON.stringify(savedTasks));
-                renderTasks('all'); // Re-render all tasks
+                updateTasks(savedTasks); // Update tasks and broadcast to other clients
             }
         });
 
@@ -79,7 +77,7 @@ function renderTasks(filter) {
         checkbox.addEventListener('change', function () {
             taskObject.done = checkbox.checked;
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            renderTasks('all'); // Re-render all tasks
+            updateTasks(savedTasks); // Update tasks and broadcast to other clients
         });
 
         return taskItem;
@@ -119,7 +117,7 @@ function renderTasks(filter) {
             const formattedDateTime = getFormattedDateTime(); // Get the formatted date and time
             savedTasks.push({ text: taskText, done: false, dateTime: formattedDateTime });
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            renderTasks('all'); // Re-render all tasks
+            updateTasks(savedTasks); // Update tasks and broadcast to other clients
             taskInput.value = '';
         } else {
             showPopup('Please enter a task in this To-do list.');
@@ -132,6 +130,7 @@ function renderTasks(filter) {
         allDiv.classList.add('active');
         doneDiv.classList.remove('active');
         pendingDiv.classList.remove('active');
+        updatePendingCount(); // Update the pending tasks count when "All" tab is clicked
     });
 
     // Event listener to display only checked tasks when "Done" div is clicked
@@ -152,9 +151,15 @@ function renderTasks(filter) {
 
     // Set "All" tab as active by default
     allDiv.click();
+    updatePendingCount(); // Update the pending tasks count when the page loads
 
-    // Append the message div to the task list
-    taskList.appendChild(messageDiv);
+    // Function to update the count of pending tasks
+    function updatePendingCount() {
+        const pendingTasks = savedTasks.filter(taskObject => !taskObject.done);
+        pendingCount.textContent = ` (${pendingTasks.length})`;
+    }
+
+    // ... (previous code)
 
     // Connect to the socket.io server
     const io = io();
@@ -168,5 +173,6 @@ function renderTasks(filter) {
     io.on('tasksUpdated', (updatedTasks) => {
         // Handle the updated tasks, e.g., render them on the client-side
         renderTasks(updatedTasks);
+        updatePendingCount(); // Update the pending tasks count when tasks are updated
     });
 });
