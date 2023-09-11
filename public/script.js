@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 ${taskObject.text}
             </label>
             <div class="task-date">${taskObject.dateTime}</div> <!-- Display formatted date and time -->
-            <button class="delete"><i class="fa-solid fa-trash-can"></i></button>
+            <button class="delete"><i class="fa-solid fa-trash"></i></button>
         `;
 
         // Attach a click event to the delete button
@@ -68,7 +68,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (confirmDelete) {
                 savedTasks.splice(index, 1);
                 localStorage.setItem('tasks', JSON.stringify(savedTasks));
-                updateTasks(savedTasks); // Update tasks and broadcast to other clients
+                // Update tasks and refresh the list
+                refreshTaskList();
             }
         });
 
@@ -77,7 +78,8 @@ document.addEventListener('DOMContentLoaded', function () {
         checkbox.addEventListener('change', function () {
             taskObject.done = checkbox.checked;
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            updateTasks(savedTasks); // Update tasks and broadcast to other clients
+            // Update tasks and refresh the list
+            refreshTaskList();
         });
 
         return taskItem;
@@ -117,7 +119,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const formattedDateTime = getFormattedDateTime(); // Get the formatted date and time
             savedTasks.push({ text: taskText, done: false, dateTime: formattedDateTime });
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            updateTasks(savedTasks); // Update tasks and broadcast to other clients
+            // Update tasks and refresh the list
+            refreshTaskList();
             taskInput.value = '';
         } else {
             showPopup('Please enter a task in this To-do list.');
@@ -139,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
         allDiv.classList.remove('active');
         doneDiv.classList.add('active');
         pendingDiv.classList.remove('active');
+        updatePendingCount(); // Update the pending tasks count when "Done" tab is clicked
     });
 
     // Event listener to display only unchecked tasks when "Pending" div is clicked
@@ -147,6 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
         allDiv.classList.remove('active');
         doneDiv.classList.remove('active');
         pendingDiv.classList.add('active');
+        updatePendingCount(); // Update the pending tasks count when "Pending" tab is clicked
     });
 
     // Set "All" tab as active by default
@@ -159,7 +164,13 @@ document.addEventListener('DOMContentLoaded', function () {
         pendingCount.textContent = ` (${pendingTasks.length})`;
     }
 
-    // ... (previous code)
+    // Function to refresh the task list
+    function refreshTaskList() {
+        // Call renderTasks with the current active filter
+        const activeFilter = document.querySelector('.filter.active').textContent.toLowerCase();
+        renderTasks(activeFilter);
+        updatePendingCount(); // Update the pending tasks count after refreshing the list
+    }
 
     // Connect to the socket.io server
     const io = io();
