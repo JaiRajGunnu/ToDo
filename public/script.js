@@ -19,7 +19,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Load tasks from local storage when the page loads
-    const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    let savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    // Define default tasks that can't be deleted
+    const defaultTasks = [
+        { text: 'Default Task 1', done: false, dateTime: getFormattedDateTime(), default: true },
+        { text: 'Default Task 2', done: false, dateTime: getFormattedDateTime(), default: true },
+    ];
 
     // Function to render tasks based on the filter
     function renderTasks(filter) {
@@ -46,6 +52,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 taskList.appendChild(taskItem);
             });
         }
+
+        // Update the pending count immediately after rendering tasks
+        updatePendingCount();
     }
 
     // Function to create a task element
@@ -57,33 +66,41 @@ document.addEventListener('DOMContentLoaded', function () {
                 ${taskObject.text}
             </label>
             <div class="task-date">${taskObject.dateTime}</div> <!-- Display formatted date and time -->
-            <button class="delete"><i class="fa-solid fa-trash"></i></button>
+            <button class="delete" ${taskObject.default ? 'disabled' : ''}><i class="fa-solid fa-trash-can"></i></button>
         `;
 
         // Attach a click event to the delete button
-        taskItem.querySelector('.delete').addEventListener('click', function () {
-            // Show a confirmation dialog
-            const confirmDelete = confirm('Are you sure you want to delete this task?');
+        if (!taskObject.default) {
+            taskItem.querySelector('.delete').addEventListener('click', function () {
+                // Show a confirmation dialog
+                const confirmDelete = confirm('Are you sure you want to delete this task?');
 
-            if (confirmDelete) {
-                savedTasks.splice(index, 1);
-                localStorage.setItem('tasks', JSON.stringify(savedTasks));
-                // Update tasks and refresh the list
-                refreshTaskList();
-            }
-        });
+                if (confirmDelete) {
+                    savedTasks.splice(index, 1);
+                    localStorage.setItem('tasks', JSON.stringify(savedTasks));
+                    renderTasks('all'); // Update tasks and re-render all tasks
+                }
+            });
+        }
 
         // Attach a change event to the checkbox
         const checkbox = taskItem.querySelector('input[type="checkbox"]');
         checkbox.addEventListener('change', function () {
             taskObject.done = checkbox.checked;
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            // Update tasks and refresh the list
-            refreshTaskList();
+            renderTasks('all'); // Update tasks and re-render all tasks
         });
 
         return taskItem;
     }
+
+    // Add default tasks to savedTasks if they don't exist
+    defaultTasks.forEach((defaultTask) => {
+        const taskExists = savedTasks.some((task) => task.text === defaultTask.text);
+        if (!taskExists) {
+            savedTasks.push(defaultTask);
+        }
+    });
 
     // Load and render all tasks initially
     renderTasks('all');
@@ -117,10 +134,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const taskText = taskInput.value.trim();
         if (taskText !== '') {
             const formattedDateTime = getFormattedDateTime(); // Get the formatted date and time
-            savedTasks.push({ text: taskText, done: false, dateTime: formattedDateTime });
+            savedTasks.push({ text: taskText, done: false, dateTime: formattedDateTime, deletable: true });
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            // Update tasks and refresh the list
-            refreshTaskList();
+            renderTasks('all'); // Update tasks and re-render all tasks
             taskInput.value = '';
         } else {
             showPopup('Please enter a task in this To-do list.');
@@ -133,7 +149,6 @@ document.addEventListener('DOMContentLoaded', function () {
         allDiv.classList.add('active');
         doneDiv.classList.remove('active');
         pendingDiv.classList.remove('active');
-        updatePendingCount(); // Update the pending tasks count when "All" tab is clicked
     });
 
     // Event listener to display only checked tasks when "Done" div is clicked
@@ -142,7 +157,6 @@ document.addEventListener('DOMContentLoaded', function () {
         allDiv.classList.remove('active');
         doneDiv.classList.add('active');
         pendingDiv.classList.remove('active');
-        updatePendingCount(); // Update the pending tasks count when "Done" tab is clicked
     });
 
     // Event listener to display only unchecked tasks when "Pending" div is clicked
@@ -151,12 +165,10 @@ document.addEventListener('DOMContentLoaded', function () {
         allDiv.classList.remove('active');
         doneDiv.classList.remove('active');
         pendingDiv.classList.add('active');
-        updatePendingCount(); // Update the pending tasks count when "Pending" tab is clicked
     });
 
     // Set "All" tab as active by default
     allDiv.click();
-    updatePendingCount(); // Update the pending tasks count when the page loads
 
     // Function to update the count of pending tasks
     function updatePendingCount() {
@@ -164,27 +176,13 @@ document.addEventListener('DOMContentLoaded', function () {
         pendingCount.textContent = ` (${pendingTasks.length})`;
     }
 
-    // Function to refresh the task list
-    function refreshTaskList() {
-        // Call renderTasks with the current active filter
-        const activeFilter = document.querySelector('.filter.active').textContent.toLowerCase();
-        renderTasks(activeFilter);
-        updatePendingCount(); // Update the pending tasks count after refreshing the list
-    }
-
     // Connect to the socket.io server
     const io = io();
-
-    // Function to update tasks and emit the update to the server
-    function updateTasks(updatedTasks) {
-        io.emit('updateTasks', updatedTasks);
-    }
 
     // Event listener to receive updated tasks from the server
     io.on('tasksUpdated', (updatedTasks) => {
         // Handle the updated tasks, e.g., render them on the client-side
-        renderTasks(updatedTasks);
-        updatePendingCount(); // Update the pending tasks count when tasks are updated
+        savedTasks = updatedTasks;
+        renderTasks('all');
     });
 });
-
