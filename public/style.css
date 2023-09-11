@@ -114,13 +114,13 @@ button#addTask {
     margin:0 0 0 10px; 
 }
 button.delete {
-    color:red;
+    color:#b6b6b6;
     width:auto;
     padding:08px 10px;
 }
 button.delete:hover {
-    color:white;
-    background:red;
+    color:white;  
+    background:red;  
 }
 button {
     border: none;
