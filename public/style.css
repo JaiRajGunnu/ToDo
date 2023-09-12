@@ -1,6 +1,6 @@
 body {
     font-family: "Poppins", sans-serif;
-    background-color: #f0f0f0;
+    background-color: #d8d8d8;
     margin: 0;
     padding: 10px;
 }
@@ -63,6 +63,24 @@ li {
     background-color: #43434317;
     border-radius: 07px;
     border:0.25px solid rgba(170, 170, 170, 0.073);
+}
+
+@media (max-width: 768px) {
+    li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+        padding: 10px;
+        font-size:16px;
+        font-family:hammersmith one ;
+        font-weight:500;
+        cursor:pointer;
+        text-transform: capitalize;
+        background-color: #43434317;
+        border-radius: 07px;
+        border:0.25px solid rgba(170, 170, 170, 0.073);
+    }
 }
 li:hover{
     background-color: #64636312;
