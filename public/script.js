@@ -61,45 +61,70 @@ document.addEventListener('DOMContentLoaded', function () {
         // Update the pending count immediately after rendering tasks
         updatePendingCount();
     }
-// Function to create a task element
-function createTaskElement(taskObject, index) {
-    const taskItem = document.createElement('li');
-    taskItem.innerHTML = `
-        <label>
-            
-            <input type="checkbox" id="task${index}" ${taskObject.done ? 'checked' : ''}>
-            ${taskObject.text}
-        </label>
-        <div class="task-date">${taskObject.dateTime}</div> <!-- Display formatted date and time --> ${taskObject.default ? '<span style="color: white; background:blue; border-radius:50%; padding:02px 06px;margin:0 05px;">M</span>' : ''}
-        ${taskObject.default ? '' : `<button class="delete"><i class="fa-solid fa-trash-can"></i></button>`}
-    `;
 
-    // Attach a click event to the delete button for non-default tasks
-    if (!taskObject.default) {
-        const deleteButton = taskItem.querySelector('.delete');
-        deleteButton.addEventListener('click', function () {
-            // Show a confirmation dialog for non-default tasks
-            const confirmDelete = confirm('Are you sure you want to delete this task?');
+    // Inside the createTaskElement function
+    function createTaskElement(taskObject, index) {
+        const taskItem = document.createElement('li');
 
-            if (confirmDelete) {
-                savedTasks.splice(index, 1);
-                localStorage.setItem('tasks', JSON.stringify(savedTasks));
-                renderTasks('all'); // Update tasks and re-render all tasks
-            }
-        });
-    }
+        // Map specific letters to todo items based on their text
+        const letterMap = {
+            'Operating System': 'M',
+            'Oops': 'T',
+            'Comp. Networks': 'W',
+            'Programming': 'T',
+            'Data Structures': 'F',
+            'DBMS / SQL': 'S',
+            'Web Dev': 'S'
+        };
 
-    // Attach a change event to the checkbox
-    const checkbox = taskItem.querySelector('input[type="checkbox"]');
-    checkbox.addEventListener('change', function () {
+        const letter = letterMap[taskObject.text] || ''; // Get the corresponding letter or an empty string
+
+        taskItem.innerHTML = `
+            <label>
+                <input type="checkbox" id="task${index}" ${taskObject.done ? 'checked' : ''}>
+                ${taskObject.text}
+            </label>
+            <div class="task-date">${taskObject.dateTime}</div> <!-- Display formatted date and time -->
+            ${taskObject.default ? `<span class="letter-day">${letter}</span>` : ''}
+            ${taskObject.default ? '' : `<button class="delete"><i class="fa-solid fa-trash-can"></i></button>`}
+        `;
+
+        // Attach a click event to the delete button for non-default tasks
+        if (!taskObject.default) {
+            const deleteButton = taskItem.querySelector('.delete');
+            deleteButton.addEventListener('click', function () {
+                // Show a confirmation dialog for non-default tasks
+                const confirmDelete = confirm('Are you sure you want to delete this task?');
+
+                if (confirmDelete) {
+                    savedTasks.splice(index, 1);
+                    localStorage.setItem('tasks', JSON.stringify(savedTasks));
+                    renderTasks('all'); // Update tasks and re-render all tasks
+                }
+            });
+        }
+
+ // Attach a change event to the checkbox
+const checkbox = taskItem.querySelector('input[type="checkbox"]');
+checkbox.addEventListener('change', function () {
+    const message = checkbox.checked ? 'completed' : 'incomplete'; // Set the message based on checkbox state
+
+    // Show a confirmation dialog with the appropriate message
+    const confirmStatusChange = confirm(`Are you sure you want to mark this task as ${message} ?`);
+
+    if (confirmStatusChange) {
         taskObject.done = checkbox.checked;
         localStorage.setItem('tasks', JSON.stringify(savedTasks));
         renderTasks('all'); // Update tasks and re-render all tasks
-    });
+    } else {
+        // Restore the checkbox state if the user cancels the confirmation
+        checkbox.checked = !checkbox.checked;
+    }
+});
 
-    return taskItem;
-}
 
+        return taskItem;
+    }
 
     // Add default tasks to savedTasks if they don't exist
     defaultTasks.forEach((defaultTask) => {
