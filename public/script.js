@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { text: 'Oops', done: false, dateTime: getFormattedDateTime(), default: true },
         { text: 'Comp. N/w', done: false, dateTime: getFormattedDateTime(), default: true },
         { text: 'Programming', done: false, dateTime: getFormattedDateTime(), default: true },
-        { text: 'Data Structures', done: false, dateTime: getFormattedDateTime(), default: true },
+        { text: 'DSA', done: false, dateTime: getFormattedDateTime(), default: true },
         { text: 'DBMS / SQL', done: false, dateTime: getFormattedDateTime(), default: true },
         { text: 'Web Dev', done: false, dateTime: getFormattedDateTime(), default: true },
     ];
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
             'Oops': 'T',
             'Comp. N/w': 'W',
             'Programming': 'T',
-            'Data Structures': 'F',
+            'DSA': 'F',
             'DBMS / SQL': 'S',
             'Web Dev': 'S'
         };
