@@ -172,7 +172,7 @@ button#addTask:hover {
 }
 
 @media (max-width: 768px) {
-    popup {
+    .popup {
         display: none;
         position: absolute;
         bottom: 0;
