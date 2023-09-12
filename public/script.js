@@ -140,7 +140,7 @@ checkbox.addEventListener('change', function () {
     // Function to show the popup with the specified message
     function showPopup(message) {
         popup.innerHTML = `<p>${message}</p>`;
-        popup.style.display = 'block';
+        popup.style.display = 'flex';
         setTimeout(() => {
             popup.style.display = 'none';
         }, 5000); // Hide the popup after 5 seconds (adjust as needed)
