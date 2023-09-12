@@ -62,17 +62,17 @@ document.addEventListener('DOMContentLoaded', function () {
         updatePendingCount();
     }
 
-    // Function to create a task element
-    function createTaskElement(taskObject, index) {
-        const taskItem = document.createElement('li');
-        taskItem.innerHTML = `
-            <label>
-                <input type="checkbox" id="task${index}" ${taskObject.done ? 'checked' : ''}>
-                ${taskObject.text}
-            </label>
-            <div class="task-date">${taskObject.dateTime}</div> <!-- Display formatted date and time -->
-            <button class="delete" ${taskObject.default ? 'disabled' : ''}><i class="fa-solid fa-trash-can"></i></button>
-        `;
+// Function to create a task element
+function createTaskElement(taskObject, index) {
+    const taskItem = document.createElement('li');
+    taskItem.innerHTML = `
+        <label>
+            <input type="checkbox" id="task${index}" ${taskObject.done ? 'checked' : ''}>
+            ${taskObject.text}
+        </label>
+        <div class="task-date">${taskObject.dateTime}</div> <!-- Display formatted date and time -->
+        <button class="delete" ${taskObject.default ? 'style="display:none;"' : ''}><i class="fa-solid fa-trash-can"></i></button>
+    `;
 // Attach a click event to the delete button for all tasks
 const deleteButton = taskItem.querySelector('.delete');
 deleteButton.addEventListener('click', function () {
