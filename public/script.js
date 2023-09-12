@@ -110,7 +110,7 @@ checkbox.addEventListener('change', function () {
     const message = checkbox.checked ? 'completed' : 'incomplete'; // Set the message based on checkbox state
 
     // Show a confirmation dialog with the appropriate message
-    const confirmStatusChange = confirm(`Are you sure you want to mark this task as ${message} ?`);
+    const confirmStatusChange = confirm(`Are you sure you want to mark this task as ${message}?`);
 
     if (confirmStatusChange) {
         taskObject.done = checkbox.checked;
