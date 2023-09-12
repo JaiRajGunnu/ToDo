@@ -5,12 +5,14 @@ body {
     padding: 10px;
 }
 .container {
+    display: flex;
     max-width: 550px;
     margin: 30px auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
 }
 h1 {
     text-align: center;
@@ -20,9 +22,9 @@ h1 {
 section {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
     font-size:16px;
-    margin: 15px 5px;    
+    margin: 15px 5px 0 5px;    
     height:40px;
 }
 section div{
@@ -64,7 +66,9 @@ li {
     border-radius: 07px;
     border:0.25px solid rgba(170, 170, 170, 0.073);
 }
-
+li:first-child{
+    margin:0px 0;
+}
 @media (max-width: 768px) {
     li {
         display: flex;
@@ -213,5 +217,5 @@ button#addTask:hover {
 }
 
 .letter-day:hover{
-    background:#4e4e4e;
+    background:blue;
 }
