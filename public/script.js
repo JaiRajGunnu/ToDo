@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const defaultTasks = [
         { text: 'Operating Sys', done: false, dateTime: getFormattedDateTime(), default: true },
         { text: 'Oops', done: false, dateTime: getFormattedDateTime(), default: true },
-        { text: 'Comp. Networks', done: false, dateTime: getFormattedDateTime(), default: true },
+        { text: 'Comp. N/w', done: false, dateTime: getFormattedDateTime(), default: true },
         { text: 'Programming', done: false, dateTime: getFormattedDateTime(), default: true },
         { text: 'Data Structures', done: false, dateTime: getFormattedDateTime(), default: true },
         { text: 'DBMS / SQL', done: false, dateTime: getFormattedDateTime(), default: true },
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const letterMap = {
             'Operating Sys': 'M',
             'Oops': 'T',
-            'Comp. Networks': 'W',
+            'Comp. N/w': 'W',
             'Programming': 'T',
             'Data Structures': 'F',
             'DBMS / SQL': 'S',
