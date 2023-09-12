@@ -61,47 +61,45 @@ document.addEventListener('DOMContentLoaded', function () {
         // Update the pending count immediately after rendering tasks
         updatePendingCount();
     }
-
 // Function to create a task element
 function createTaskElement(taskObject, index) {
     const taskItem = document.createElement('li');
     taskItem.innerHTML = `
         <label>
+            
             <input type="checkbox" id="task${index}" ${taskObject.done ? 'checked' : ''}>
             ${taskObject.text}
         </label>
-        <div class="task-date">${taskObject.dateTime}</div> <!-- Display formatted date and time -->
-        <button class="delete" ${taskObject.default ? 'style="display:none;"' : ''}><i class="fa-solid fa-trash-can"></i></button>
+        <div class="task-date">${taskObject.dateTime}</div> <!-- Display formatted date and time --> ${taskObject.default ? '<span style="color: white; background:blue; border-radius:50%; padding:02px 06px;margin:0 05px;">M</span>' : ''}
+        ${taskObject.default ? '' : `<button class="delete"><i class="fa-solid fa-trash-can"></i></button>`}
     `;
-// Attach a click event to the delete button for all tasks
-const deleteButton = taskItem.querySelector('.delete');
-deleteButton.addEventListener('click', function () {
-    if (taskObject.default) {
-        // Display an alert for 
-          const confirmDelete = confirm('Are you sure you want to delete this task?');
-    } else {
-        // Show a confirmation dialog for non-default tasks
-        const confirmDelete = confirm('Are you sure you want to delete this task?');
 
-        if (confirmDelete) {
-            savedTasks.splice(index, 1);
-            localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            renderTasks('all'); // Update tasks and re-render all tasks
-        }
-    }
-});
+    // Attach a click event to the delete button for non-default tasks
+    if (!taskObject.default) {
+        const deleteButton = taskItem.querySelector('.delete');
+        deleteButton.addEventListener('click', function () {
+            // Show a confirmation dialog for non-default tasks
+            const confirmDelete = confirm('Are you sure you want to delete this task?');
 
-
-        // Attach a change event to the checkbox
-        const checkbox = taskItem.querySelector('input[type="checkbox"]');
-        checkbox.addEventListener('change', function () {
-            taskObject.done = checkbox.checked;
-            localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            renderTasks('all'); // Update tasks and re-render all tasks
+            if (confirmDelete) {
+                savedTasks.splice(index, 1);
+                localStorage.setItem('tasks', JSON.stringify(savedTasks));
+                renderTasks('all'); // Update tasks and re-render all tasks
+            }
         });
-
-        return taskItem;
     }
+
+    // Attach a change event to the checkbox
+    const checkbox = taskItem.querySelector('input[type="checkbox"]');
+    checkbox.addEventListener('change', function () {
+        taskObject.done = checkbox.checked;
+        localStorage.setItem('tasks', JSON.stringify(savedTasks));
+        renderTasks('all'); // Update tasks and re-render all tasks
+    });
+
+    return taskItem;
+}
+
 
     // Add default tasks to savedTasks if they don't exist
     defaultTasks.forEach((defaultTask) => {
