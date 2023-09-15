@@ -1,4 +1,3 @@
-# To-Do App
 
 <h1 align="center">Hi 👋, This is Jai Raj Gunnu</h1>
 <h3 align="center"><i>I created a dynamic to-do list web app with real-time updates, mobile responsiveness, priority tracking, and local storage for seamless task
