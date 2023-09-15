@@ -10,4 +10,4 @@ Stay on top of your commitments, increase productivity, and reduce stress with o
 
 Live URL : https://todo-jairajg.vercel.app/
 
-![image](https://github.com/JaiRajGunnu/ToDo/assets/78605621/b2355996-e210-4f96-9f15-cefbcd1c1f0f)
+![image](https://github.com/JaiRajGunnu/ToDo/assets/78605621/5e43db6f-58df-4c0c-a3d3-66ccc2c34baa)
