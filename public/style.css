@@ -177,7 +177,7 @@ button#addTask:hover {
 }
 .button-group {
     display: flex;
-    justify-content: center;
+    justify-content:flex-start;
     margin: 10px 0 0 0;
 }
 
@@ -186,7 +186,7 @@ button#addTask:hover {
 }
 
 h2 {
-    text-align: center;
+    text-align: left;
     margin-bottom: 25px;
 }
 
