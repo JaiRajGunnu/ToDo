@@ -3,30 +3,31 @@ document.addEventListener('DOMContentLoaded', function () {
     const addTaskButton = document.getElementById('addTask');
     const taskList = document.getElementById('taskList');
     const popup = document.getElementById('popup');
+    const overlay = document.getElementById('overlay'); // Select the overlay element
     const allDiv = document.querySelector('.a'); // All div
     const doneDiv = document.querySelector('.b'); // Done div
     const pendingDiv = document.querySelector('.c'); // Pending div
-    const messageDiv = document.createElement('div'); // Create message div
     const pendingCount = document.getElementById('pendingCount'); // Pending tasks count element
 
-    // Function to get the formatted date and time
-    function getFormattedDateTime() {
-        const now = new Date();
-        const date = now.getDate();
-        const month = now.toLocaleString('default', { month: 'short' });
-        const time = `${now.getHours()}:${(now.getMinutes() < 10 ? '0' : '') + now.getMinutes()}`;
-        return `${date} ${month}, ${time}`;
+    function getFormattedDateTime(date, time) {
+        const dateObj = new Date(`${date}T${time}`);
+        const day = dateObj.getDate();
+        const month = dateObj.toLocaleString('default', { month: 'short' });
+        const hours24 = dateObj.getHours();
+        const minutes = dateObj.getMinutes();
+        const ampm = hours24 >= 12 ? 'PM' : 'AM';
+        const hours12 = hours24 % 12;
+        const formattedHours = hours12 ? hours12 : 12; // Handle midnight case
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+        return `${day} ${month}, ${formattedHours}:${formattedMinutes} ${ampm}`;
     }
 
-    // Load tasks from local storage when the page loads
     let savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-    // Define default tasks that can't be deleted
     const defaultTasks = [
-        { text: 'Web Dev', done: false, dateTime: getFormattedDateTime(), default: true },
+        { text: 'Web Dev', done: false, dateTime: getFormattedDateTime(new Date().toISOString().split('T')[0], '00:00'), default: true },
     ];
 
-    // Function to render tasks based on the filter
     function renderTasks(filter) {
         taskList.innerHTML = '';
 
@@ -52,69 +53,56 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        // Update the pending count immediately after rendering tasks
         updatePendingCount();
     }
 
-    // Inside the createTaskElement function
     function createTaskElement(taskObject, index) {
         const taskItem = document.createElement('li');
 
-        // Map specific letters to todo items based on their text
         const letterMap = {
             'Web Dev': 'S'
         };
 
-        const letter = letterMap[taskObject.text] || ''; // Get the corresponding letter or an empty string
+        const letter = letterMap[taskObject.text] || '';
 
         taskItem.innerHTML = `
             <label>
                 <input type="checkbox" id="task${index}" ${taskObject.done ? 'checked' : ''}>
                 ${taskObject.text}
             </label>
-            <div class="task-date">${taskObject.dateTime}</div> <!-- Display formatted date and time -->
+            <div class="task-date">${taskObject.dateTime}</div>
             ${taskObject.default ? `<span class="letter-day">${letter}</span>` : ''}
             ${taskObject.default ? '' : `<button class="delete"><i class="fa-solid fa-trash-can"></i></button>`}
         `;
 
-        // Attach a click event to the delete button for non-default tasks
         if (!taskObject.default) {
             const deleteButton = taskItem.querySelector('.delete');
             deleteButton.addEventListener('click', function () {
-                // Show a confirmation dialog for non-default tasks
                 const confirmDelete = confirm('Are you sure you want to delete this task?');
-
                 if (confirmDelete) {
                     savedTasks.splice(index, 1);
                     localStorage.setItem('tasks', JSON.stringify(savedTasks));
-                    renderTasks('all'); // Update tasks and re-render all tasks
+                    renderTasks('all');
                 }
             });
         }
 
- // Attach a change event to the checkbox
-const checkbox = taskItem.querySelector('input[type="checkbox"]');
-checkbox.addEventListener('change', function () {
-    const message = checkbox.checked ? 'completed' : 'incomplete'; // Set the message based on checkbox state
-
-    // Show a confirmation dialog with the appropriate message
-    const confirmStatusChange = confirm(`Are you sure you want to mark this task as ${message}?`);
-
-    if (confirmStatusChange) {
-        taskObject.done = checkbox.checked;
-        localStorage.setItem('tasks', JSON.stringify(savedTasks));
-        renderTasks('all'); // Update tasks and re-render all tasks
-    } else {
-        // Restore the checkbox state if the user cancels the confirmation
-        checkbox.checked = !checkbox.checked;
-    }
-});
-
+        const checkbox = taskItem.querySelector('input[type="checkbox"]');
+        checkbox.addEventListener('change', function () {
+            const message = checkbox.checked ? 'completed' : 'incomplete';
+            const confirmStatusChange = confirm(`Are you sure you want to mark this task as ${message}?`);
+            if (confirmStatusChange) {
+                taskObject.done = checkbox.checked;
+                localStorage.setItem('tasks', JSON.stringify(savedTasks));
+                renderTasks('all');
+            } else {
+                checkbox.checked = !checkbox.checked;
+            }
+        });
 
         return taskItem;
     }
 
-    // Add default tasks to savedTasks if they don't exist
     defaultTasks.forEach((defaultTask) => {
         const taskExists = savedTasks.some((task) => task.text === defaultTask.text);
         if (!taskExists) {
@@ -122,87 +110,94 @@ checkbox.addEventListener('change', function () {
         }
     });
 
-    // Load and render all tasks initially
     renderTasks('all');
 
-    // Function to show the popup with the specified message
     function showPopup(message) {
         popup.innerHTML = `<p>${message}</p>`;
         popup.style.display = 'flex';
+        popup.style.flexDirection = 'row';
+        overlay.style.display = 'block'; // Show the overlay
+
         setTimeout(() => {
             popup.style.display = 'none';
-        }, 5000); // Hide the popup after 5 seconds (adjust as needed)
+            overlay.style.display = 'none'; // Hide the overlay
+        }, 5000);
     }
 
-    // Add a new task when the "Add" button is clicked
     addTaskButton.addEventListener('click', function () {
-        addTask();
+        showTaskFormPopup();
     });
 
-    // Add a new task when the Enter key is pressed in the input field
     taskInput.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
-            addTask();
+            showTaskFormPopup();
         }
     });
 
-    // Automatically focus on the input field when the page loads
-    taskInput.focus();
+    function showTaskFormPopup() {
+        popup.innerHTML = `
+            <div class="task-container">
+                <h2 class="title">Add Extras</h2>
+                <div class="daytime">
+                    <label for="popupDateInput" class="label">Date :</label>
+                    <input type="date" id="popupDateInput" class="input-field" />
+                    <label for="popupTimeInput" class="label">Time :</label>
+                    <input type="time" id="popupTimeInput" class="input-field" />
+                </div>
+                <div class="button-group">
+                    <button id="saveTaskButton" class="btn btn-save">Save</button>
+                    <button id="cancelButton" class="btn btn-cancel">Cancel</button>
+                </div>
+            </div>
+        `;
+    
+        popup.style.display = 'flex'; // Show the popup
+        popup.style.flexDirection = 'column'; // Adjust flex direction if needed
+        overlay.style.display = 'block'; // Show the overlay
 
-    // Function to add a new task
-    function addTask() {
-        const taskText = taskInput.value.trim();
+        document.getElementById('saveTaskButton').addEventListener('click', function () {
+            addTaskFromPopup();
+        });
+    
+        document.getElementById('cancelButton').addEventListener('click', function () {
+            popup.style.display = 'none'; // Hide the popup
+            overlay.style.display = 'none'; // Hide the overlay
+        });
+    }
+    
+    function addTaskFromPopup() {
+        const taskDate = document.getElementById('popupDateInput').value;
+        const taskTime = document.getElementById('popupTimeInput').value;
+
+        const taskText = taskInput.value.trim();  // Use the main input field for task description
+
         if (taskText !== '') {
-            const formattedDateTime = getFormattedDateTime(); // Get the formatted date and time
+            const formattedDateTime = taskDate && taskTime ? getFormattedDateTime(taskDate, taskTime) : getFormattedDateTime(new Date().toISOString().split('T')[0], '00:00');
             savedTasks.push({ text: taskText, done: false, dateTime: formattedDateTime, deletable: true });
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
-            renderTasks('all'); // Update tasks and re-render all tasks
-            taskInput.value = '';
+            renderTasks('all');
+            popup.style.display = 'none';
+            overlay.style.display = 'none'; // Hide the overlay
+            taskInput.value = '';  // Clear the main input field
         } else {
-            showPopup('Please enter a task in this To-do list.');
+            showPopup('Task added successfully.');
         }
     }
 
-    // Event listener to display all tasks when "All" div is clicked
-    allDiv.addEventListener('click', function () {
-        renderTasks('all');
-        allDiv.classList.add('active');
-        doneDiv.classList.remove('active');
-        pendingDiv.classList.remove('active');
-    });
-
-    // Event listener to display only checked tasks when "Done" div is clicked
-    doneDiv.addEventListener('click', function () {
-        renderTasks('done');
-        allDiv.classList.remove('active');
-        doneDiv.classList.add('active');
-        pendingDiv.classList.remove('active');
-    });
-
-    // Event listener to display only unchecked tasks when "Pending" div is clicked
-    pendingDiv.addEventListener('click', function () {
-        renderTasks('pending');
-        allDiv.classList.remove('active');
-        doneDiv.classList.remove('active');
-        pendingDiv.classList.add('active');
-    });
-
-    // Set "All" tab as active by default
-    allDiv.click();
-
-    // Function to update the count of pending tasks
     function updatePendingCount() {
-        const pendingTasks = savedTasks.filter(taskObject => !taskObject.done);
-        pendingCount.textContent = ` (${pendingTasks.length})`;
+        const pendingTasks = savedTasks.filter(task => !task.done);
+        pendingCount.textContent = pendingTasks.length;
     }
 
-    // Connect to the socket.io server
-    const io = io();
-
-    // Event listener to receive updated tasks from the server
-    io.on('tasksUpdated', (updatedTasks) => {
-        // Handle the updated tasks, e.g., render them on the client-side
-        savedTasks = updatedTasks;
+    allDiv.addEventListener('click', function () {
         renderTasks('all');
+    });
+
+    doneDiv.addEventListener('click', function () {
+        renderTasks('done');
+    });
+
+    pendingDiv.addEventListener('click', function () {
+        renderTasks('pending');
     });
 });
