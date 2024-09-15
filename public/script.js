@@ -159,9 +159,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 <h2 class="title">Add Extras</h2>
                 <div class="daytime">
                     <label for="popupDateInput" class="label">Date :</label>
-                    <input type="date" id="popupDateInput" class="input-field" />
+                    <input type="date" id="popupDateInput" placeholder="Date" class="input-field" />
                     <label for="popupTimeInput" class="label">Time :</label>
-                    <input type="time" id="popupTimeInput" class="input-field" />
+                    <input type="time" id="popupTimeInput" placeholder="Time" class="input-field" />
                 </div>
                 <div class="button-group">
                     <button id="saveTaskButton" class="btn btn-save">Save</button>
