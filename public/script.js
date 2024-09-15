@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         updatePendingCount();
     }
-
     function createTaskElement(taskObject, index) {
         const taskItem = document.createElement('li');
 
@@ -71,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
         taskItem.innerHTML = `
             <label>
                 <input type="checkbox" id="task${index}" ${taskObject.done ? 'checked' : ''}>
-                ${taskObject.text}
+                <span class="${taskObject.done ? 'completed-task' : ''}">${taskObject.text}</span>
             </label>
             <div class="task-date">${taskObject.dateTime}</div>
             ${taskObject.default ? `<span class="letter-day">${letter}</span>` : ''}
@@ -91,11 +90,21 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const checkbox = taskItem.querySelector('input[type="checkbox"]');
+        const taskTextElement = taskItem.querySelector('span');
+
         checkbox.addEventListener('change', function () {
             const message = checkbox.checked ? 'completed' : 'incomplete';
             const confirmStatusChange = confirm(`Are you sure you want to mark this task as ${message}?`);
             if (confirmStatusChange) {
                 taskObject.done = checkbox.checked;
+
+                // Toggle strikethrough class
+                if (taskObject.done) {
+                    taskTextElement.classList.add('completed-task');
+                } else {
+                    taskTextElement.classList.remove('completed-task');
+                }
+
                 localStorage.setItem('tasks', JSON.stringify(savedTasks));
                 renderTasks('all');
             } else {
@@ -105,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return taskItem;
     }
+
 
     defaultTasks.forEach((defaultTask) => {
         const taskExists = savedTasks.some((task) => task.text === defaultTask.text);
@@ -159,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </div>
         `;
-    
+
         popup.style.display = 'flex';
         popup.style.flexDirection = 'column';
         overlay.style.display = 'block';
@@ -167,19 +177,19 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('saveTaskButton').addEventListener('click', function () {
             addTaskFromPopup();
         });
-    
+
         document.getElementById('cancelButton').addEventListener('click', function () {
             popup.style.display = 'none';
             overlay.style.display = 'none';
         });
     }
-    
+
     function addTaskFromPopup() {
         const taskDate = document.getElementById('popupDateInput').value || 'N/A';
         const taskTime = document.getElementById('popupTimeInput').value || 'N/A';
-    
+
         const taskText = taskInput.value.trim(); // Use the main input field for task description
-    
+
         if (taskText === '') {
             alert('Please add at least one task.');
         } else {
@@ -192,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
             taskInput.value = '';
         }
     }
-    
+
     function updatePendingCount() {
         const pendingTasks = savedTasks.filter(task => !task.done);
         pendingCount.textContent = pendingTasks.length;
@@ -217,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
         allDiv.classList.remove('active');
         doneDiv.classList.remove('active');
         pendingDiv.classList.remove('active');
-    
+
         if (filter === 'all') {
             allDiv.classList.add('active');
         } else if (filter === 'done') {
