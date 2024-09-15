@@ -37,7 +37,6 @@ section div {
     color: #272727;
     transition: 0.75s;
     position: relative;
-    /* Ensure positioning context for the ::after element */
 }
 
 section div.active,
@@ -50,31 +49,25 @@ section div::after {
     display: block;
     height: 2px;
     background-color: transparent;
-    /* Default to transparent */
     position: absolute;
     bottom: -5px;
-    /* Position it just below the text */
     left: 0;
     right: 0;
     transition: background-color 0.3s ease;
-    /* Smooth transition for color change */
 }
 
 section div.active::after {
     background-color: blue;
-    /* Blue line for active filter */
 }
 
 section div:hover::after {
     background-color: blue;
-    /* Blue line on hover as well */
 }
 
 .completed-task {
     text-decoration: line-through;
     opacity: 65%
 }
-
 
 ul {
     list-style: none;
@@ -192,16 +185,13 @@ h2 {
 
 .overlay {
     display: none;
-    /* Initially hidden */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    /* Black background with opacity */
     z-index: 999;
-    /* Ensure it’s above other content but below the popup */
 }
 
 .popup {
@@ -226,7 +216,6 @@ h2 {
 @media (max-width: 768px) {
     .popup {
         width: 75%;
-        /* Adjust width for tablets and small screens */
         padding: 20px 20px 15px 15px;
     }
 }
@@ -234,7 +223,6 @@ h2 {
 @media (max-width: 480px) {
     .popup {
         width: 80%;
-        /* Adjust width for mobile phones */
         padding: 20px 20px 15px 15px;
     }
 }
@@ -250,7 +238,6 @@ h2 {
     padding: 10px;
     border-radius: 5px;
     border: 2px solid #2f303230;
-    /* Blue borders */
     background-color: #fff;
     font-size: 16px;
     margin-bottom: 15px;
@@ -260,9 +247,7 @@ h2 {
 .popup input:focus {
     outline: none;
     border: 2px solid blue;
-    /* Lighter blue when focused */
     background: rgba(0, 173, 255, 0.1);
-    /* Subtle blue highlight */
 }
 
 .daytime {
@@ -281,28 +266,23 @@ button {
 
 .primary-button {
     background-color: blue;
-    /* Blue button for Save */
     color: white;
     margin-top: 10px;
 }
 
 .primary-button:hover {
     background-color: #000a7a;
-    /* Darker blue on hover */
 }
 
 .secondary-button {
     background-color: white;
-    /* White button for Cancel */
     color: blue;
     border: 2px solid blue;
-    /* Blue border */
     margin-top: 10px;
 }
 
 .secondary-button:hover {
     background-color: blue;
-    /* Invert to blue on hover */
     color: white;
 }
 
@@ -313,7 +293,6 @@ button {
 
 .popup button:hover {
     transform: translateY(-2px);
-    /* Slight hover effect */
 }
 
 #pc,
@@ -321,23 +300,17 @@ button {
     font-size: 13px;
 }
 
-
 #saveTaskButton {
     background-color: blue;
     color: white;
     font-weight: bolder;
 }
 
-
-
-
-
 .daytime {
 
     display: flex;
     flex-direction: column;
 }
-
 
 .letter-day {
     color: white;
