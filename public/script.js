@@ -23,8 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Define default tasks that can't be deleted
     const defaultTasks = [
-        { text: 'Sample', done: false, dateTime: getFormattedDateTime(), default: true },
-
+        { text: 'Web Dev', done: false, dateTime: getFormattedDateTime(), default: true },
     ];
 
     // Function to render tasks based on the filter
@@ -63,12 +62,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Map specific letters to todo items based on their text
         const letterMap = {
-            'Operating Sys': 'M',
-            'Oops': 'T',
-            'Comp. N/w': 'W',
-            'Programming': 'T',
-            'DSA': 'F',
-            'DBMS / SQL': 'S',
             'Web Dev': 'S'
         };
 
