@@ -220,14 +220,14 @@ h2 {
 }
 
 .task-container {
-    padding: 10px 35px 30px 25px;
+    padding: 10px 50px 30px 25px;
 }
 
 @media (max-width: 768px) {
     .popup {
         width: 75%;
         /* Adjust width for tablets and small screens */
-        padding: 20px 35px 15px 15px;
+        padding: 20px 20px 15px 15px;
     }
 }
 
@@ -235,7 +235,7 @@ h2 {
     .popup {
         width: 80%;
         /* Adjust width for mobile phones */
-        padding: 20px 35px 15px 15px;
+        padding: 20px 20px 15px 15px;
     }
 }
 
