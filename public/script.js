@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const minutes = dateObj.getMinutes();
         const ampm = hours24 >= 12 ? 'PM' : 'AM';
         const hours12 = hours24 % 12;
-        const formattedHours = hours12 ? hours12 : 00; // Handle midnight case
+        const formattedHours = hours12 ? hours12 : 0o0; // Handle midnight case
         const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
         return `${day} ${month}, ${formattedHours}:${formattedMinutes} ${ampm}`;
     }
