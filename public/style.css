@@ -219,9 +219,8 @@ h2 {
     z-index: 1000;
 }
 
-
 .task-container {
-    padding: 10px 45px 30px 25px;
+    padding: 10px 35px 30px 25px;
 }
 
 @media (max-width: 768px) {
