@@ -172,6 +172,9 @@ button#addTask:hover {
     background: rgba(49, 49, 49, 0.996);
 }
 
+#popupDateInput, #popupTimeInput {
+      font-family: 'Poppins', sans-serif;
+}
 .button-group {
     display: flex;
     justify-content: center;
