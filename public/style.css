@@ -27,25 +27,40 @@ section {
     margin: 15px 5px 0 5px;    
     height: 40px;
 }
+
 section div {
     cursor: pointer;
     font-weight: bold;
     color: #272727;
     transition: 0.75s;
+    position: relative; /* Ensure positioning context for the ::after element */
 }
-section div:hover {
+
+section div.active, section div:hover {
     color: blue;
 }
-section div.active {
-    color: blue;
-}
-section div:active::after, section div:focus::after, section div:hover::after, section div.active::after {
+
+section div::after {
     content: "";
     display: block;
     height: 2px;
-    background-color: blue;
-    margin-top: 0px;
+    background-color: transparent; /* Default to transparent */
+    position: absolute;
+    bottom: -5px; /* Position it just below the text */
+    left: 0;
+    right: 0;
+    transition: background-color 0.3s ease; /* Smooth transition for color change */
 }
+
+section div.active::after {
+    background-color: blue; /* Blue line for active filter */
+}
+
+section div:hover::after {
+    background-color: blue; /* Blue line on hover as well */
+}
+
+
 ul {
     list-style: none;
     padding: 0;
@@ -256,7 +271,7 @@ button {
     transform: translateY(-2px); /* Slight hover effect */
 }
 
-#pendingCount {
+#pc, #pendingCount {
     font-size: 13px;
 }
 

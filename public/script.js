@@ -3,13 +3,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const addTaskButton = document.getElementById('addTask');
     const taskList = document.getElementById('taskList');
     const popup = document.getElementById('popup');
-    const overlay = document.getElementById('overlay'); // Select the overlay element
-    const allDiv = document.querySelector('.a'); // All div
-    const doneDiv = document.querySelector('.b'); // Done div
-    const pendingDiv = document.querySelector('.c'); // Pending div
-    const pendingCount = document.getElementById('pendingCount'); // Pending tasks count element
+    const overlay = document.getElementById('overlay');
+    const allDiv = document.querySelector('.a');
+    const doneDiv = document.querySelector('.b');
+    const pendingDiv = document.querySelector('.c');
+    const pendingCount = document.getElementById('pendingCount');
 
     function getFormattedDateTime(date, time) {
+        if (date === 'N/A' && time === 'N/A') {
+            return 'N/A';
+        }
         const dateObj = new Date(`${date}T${time}`);
         const day = dateObj.getDate();
         const month = dateObj.toLocaleString('default', { month: 'short' });
@@ -17,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const minutes = dateObj.getMinutes();
         const ampm = hours24 >= 12 ? 'PM' : 'AM';
         const hours12 = hours24 % 12;
-        const formattedHours = hours12 ? hours12 : 12; // Handle midnight case
+        const formattedHours = hours12 ? hours12 : 00; // Handle midnight case
         const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
         return `${day} ${month}, ${formattedHours}:${formattedMinutes} ${ampm}`;
     }
@@ -25,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
     const defaultTasks = [
-        { text: 'Web Dev', done: false, dateTime: getFormattedDateTime(new Date().toISOString().split('T')[0], '00:00'), default: true },
+        { text: 'Web Dev', done: false, dateTime: 'N/A', default: true },
     ];
 
     function renderTasks(filter) {
@@ -116,21 +119,27 @@ document.addEventListener('DOMContentLoaded', function () {
         popup.innerHTML = `<p>${message}</p>`;
         popup.style.display = 'flex';
         popup.style.flexDirection = 'row';
-        overlay.style.display = 'block'; // Show the overlay
+        overlay.style.display = 'block';
 
         setTimeout(() => {
             popup.style.display = 'none';
-            overlay.style.display = 'none'; // Hide the overlay
+            overlay.style.display = 'none';
         }, 5000);
     }
 
     addTaskButton.addEventListener('click', function () {
-        showTaskFormPopup();
+        const taskText = taskInput.value.trim();
+
+        if (taskText === '') {
+            alert('Please add at least one task.');
+        } else {
+            showTaskFormPopup();
+        }
     });
 
     taskInput.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
-            showTaskFormPopup();
+            addTaskButton.click(); // Simulate a click on the addTaskButton
         }
     });
 
@@ -151,53 +160,73 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         `;
     
-        popup.style.display = 'flex'; // Show the popup
-        popup.style.flexDirection = 'column'; // Adjust flex direction if needed
-        overlay.style.display = 'block'; // Show the overlay
+        popup.style.display = 'flex';
+        popup.style.flexDirection = 'column';
+        overlay.style.display = 'block';
 
         document.getElementById('saveTaskButton').addEventListener('click', function () {
             addTaskFromPopup();
         });
     
         document.getElementById('cancelButton').addEventListener('click', function () {
-            popup.style.display = 'none'; // Hide the popup
-            overlay.style.display = 'none'; // Hide the overlay
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
         });
     }
     
     function addTaskFromPopup() {
-        const taskDate = document.getElementById('popupDateInput').value;
-        const taskTime = document.getElementById('popupTimeInput').value;
-
-        const taskText = taskInput.value.trim();  // Use the main input field for task description
-
-        if (taskText !== '') {
-            const formattedDateTime = taskDate && taskTime ? getFormattedDateTime(taskDate, taskTime) : getFormattedDateTime(new Date().toISOString().split('T')[0], '00:00');
+        const taskDate = document.getElementById('popupDateInput').value || 'N/A';
+        const taskTime = document.getElementById('popupTimeInput').value || 'N/A';
+    
+        const taskText = taskInput.value.trim(); // Use the main input field for task description
+    
+        if (taskText === '') {
+            alert('Please add at least one task.');
+        } else {
+            const formattedDateTime = getFormattedDateTime(taskDate, taskTime);
             savedTasks.push({ text: taskText, done: false, dateTime: formattedDateTime, deletable: true });
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
             renderTasks('all');
             popup.style.display = 'none';
-            overlay.style.display = 'none'; // Hide the overlay
-            taskInput.value = '';  // Clear the main input field
-        } else {
-            showPopup('Task added successfully.');
+            overlay.style.display = 'none';
+            taskInput.value = '';
         }
     }
-
+    
     function updatePendingCount() {
         const pendingTasks = savedTasks.filter(task => !task.done);
         pendingCount.textContent = pendingTasks.length;
     }
 
     allDiv.addEventListener('click', function () {
+        setActiveFilter('all');
         renderTasks('all');
     });
 
     doneDiv.addEventListener('click', function () {
+        setActiveFilter('done');
         renderTasks('done');
     });
 
     pendingDiv.addEventListener('click', function () {
+        setActiveFilter('pending');
         renderTasks('pending');
     });
+
+    function setActiveFilter(filter) {
+        allDiv.classList.remove('active');
+        doneDiv.classList.remove('active');
+        pendingDiv.classList.remove('active');
+    
+        if (filter === 'all') {
+            allDiv.classList.add('active');
+        } else if (filter === 'done') {
+            doneDiv.classList.add('active');
+        } else if (filter === 'pending') {
+            pendingDiv.classList.add('active');
+        }
+    }
+
+    // Set the initial active filter to 'all'
+    setActiveFilter('all');
 });
