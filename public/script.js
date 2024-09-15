@@ -23,13 +23,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Define default tasks that can't be deleted
     const defaultTasks = [
-        { text: 'Operating Sys', done: false, dateTime: getFormattedDateTime(), default: true },
-        { text: 'Oops', done: false, dateTime: getFormattedDateTime(), default: true },
-        { text: 'Comp. N/w', done: false, dateTime: getFormattedDateTime(), default: true },
-        { text: 'Programming', done: false, dateTime: getFormattedDateTime(), default: true },
-        { text: 'DSA', done: false, dateTime: getFormattedDateTime(), default: true },
-        { text: 'DBMS / SQL', done: false, dateTime: getFormattedDateTime(), default: true },
-        { text: 'Web Dev', done: false, dateTime: getFormattedDateTime(), default: true },
+        { text: 'Sample', done: false, dateTime: getFormattedDateTime(), default: true },
+
     ];
 
     // Function to render tasks based on the filter
